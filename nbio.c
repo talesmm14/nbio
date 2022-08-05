@@ -153,6 +153,7 @@ static PyObject *nbio_set_info(PyObject *self, PyObject* args)
 	}
 	return display_error(err);
 }
+
 static PyObject *nbio_enroll(PyObject *self, PyObject* args)
 {
 	NBioAPI_RETURN err;
@@ -447,7 +448,7 @@ static PyObject *display_error(NBioAPI_RETURN errCode)
 			error_msg = Py_BuildValue("s", error_generic);
 			break;
 	}
-	printf("%s\n",PyString_AsString(error_msg));
+	printf("%s\n",PyUnicode_AsUTF8(error_msg));
 	return Py_False;
 }
 
@@ -463,9 +464,21 @@ static PyMethodDef nbio_methods[] = {
 	{NULL, NULL} //sentinela
 };
 
+static struct PyModuleDef cModNBio = {
+	PyModuleDef_HEAD_INIT,
+	"nbio",
+	"",
+	-1,
+	nbio_methods
+};
+
+PyMODINIT_FUNC PyInit_nbio(void)
+{
+    return PyModule_Create(&cModNBio);
+}
 
 void initnbio(void)
 {
 	PyImport_AddModule("nbio");
-	Py_InitModule("nbio", nbio_methods);
+	PyInit_nbio();
 }

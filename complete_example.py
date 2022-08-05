@@ -47,29 +47,29 @@ class User(object):
 
 def cadastrar():
     name = raw_input('Digite o nome do usuário: ')
-    print 'Posicione o dedo no leitor biométrico'
+    print('Posicione o dedo no leitor biométrico')
     digital = nbio.enroll()
     new_user = User(name, digital)
     try:
         new_user.save()
     except ValueError as e:
-        print e
+        print(e)
     else:
-        print 'Usuário %s cadastrado com sucesso.' % new_user
+        print('Usuário %s cadastrado com sucesso.' % new_user)
 
 
 def verificar():
-    print 'Posicione o dedo no leitor biométrico'
+    print('Posicione o dedo no leitor biométrico')
     digital = nbio.enroll()
     user = User.find_by_digital(lambda x: nbio.verify_match(digital, x))
     if user:
-        print 'Usuário encontrado:', user
+        print('Usuário encontrado:', user)
     else:
-        print 'Nenhum usuário encontrado.'
+        print('Nenhum usuário encontrado.')
 
 
 def sair():
-    print 'Saindo...'
+    print('Saindo...')
     nbio.close()
     sys.exit()
 
@@ -89,11 +89,11 @@ def main():
     nbio.init()
     nbio.open()
     while True:
-        print menu
+        print(menu)
         menu_opt = raw_input('>>> ')
         menu_action = menu_opts.get(menu_opt)
         if menu_action is None:
-            print 'Error: Opção inválida'
+            print('Error: Opção inválida')
         else:
             menu_action()
 if __name__ == '__main__':
